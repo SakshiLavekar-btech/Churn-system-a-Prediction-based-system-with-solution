@@ -189,4 +189,7 @@ print(classification_report(y_test,y_pred))
 #    macro avg       0.77      0.73      0.75       705
 # weighted avg       0.80      0.81      0.80       705
 
-pickle.dump(pipe,open('churn_system.pkl','wb'))
+
+import joblib
+
+joblib.dump(pipe, "churn_system.pkl")

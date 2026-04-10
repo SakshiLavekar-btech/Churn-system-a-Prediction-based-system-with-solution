@@ -24,7 +24,10 @@ if not st.session_state["logged_in"]:
     login()
     st.stop()
 
-pipe = pickle.load(open("churn_system.pkl", "rb"))
+import joblib
+
+model = joblib.load("churn_system.pkl")
+
 
 df = pd.read_csv("Telecom_churn.csv")
 
@@ -169,8 +172,8 @@ if page == "Predict Churn":
             "TotalCharges": TotalCharges
         }])
         
-        pred = pipe.predict(input_df)
-        prob = pipe.predict_proba(input_df)[0][1]
+        pred = model.predict(input_df)
+        prob = model.predict_proba(input_df)[0][1]
         
         st.subheader("Prediction Result")
         if pred[0]==1:

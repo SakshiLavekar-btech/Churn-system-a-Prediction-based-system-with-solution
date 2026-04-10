@@ -96,14 +96,21 @@ binary_columns = ['SeniorCitizen', 'family',
           'MultipleLines',
          'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport',
          'Entertainment', 'PaperlessBilling']
-preprocessing=ColumnTransformer(
+preprocessing = ColumnTransformer(
     transformers=[
-    ('trf1',SimpleImputer(strategy='mean'),['TotalCharges']),
-    ('trf2',OneHotEncoder(drop='first'),nominal_columns),
-    ('trf3',OrdinalEncoder(categories=[['Month-to-month','One year','Two year']]),ordinal_columns),
-    ('trf4',StandardScaler(),scale),
-    ('bin', 'passthrough', binary_columns)
-],remainder='drop')
+        ('num', SimpleImputer(strategy='median'), scale),
+
+        ('cat', OneHotEncoder(drop='first', handle_unknown='ignore'), nominal_columns),
+
+        ('ord', OrdinalEncoder(
+            categories=[['Month-to-month','One year','Two year']],
+            handle_unknown='use_encoded_value',
+            unknown_value=-1
+        ), ordinal_columns),
+
+        ('bin', SimpleImputer(strategy='most_frequent'), binary_columns)
+    ]
+)
 
 
 pipe=Pipeline(
